@@ -33,6 +33,11 @@ pipeline {
       command:
       - cat
       tty: true
+    - name: docker
+      image: docker
+      command:
+      - cat
+      tty: true
   """
   }
 	}
@@ -46,11 +51,19 @@ pipeline {
       }
         }
 }
-    stage("Docker Build") {
+//     stage("Docker Build") {
+//             steps {
+//               container('gcloud') {
+//                   // build
+//                   sh "gcloud builds submit -t ${IMAGE_TAG} . "
+//           }
+//             }
+//     }
+	  stage("Docker Build") {
             steps {
-              container('gcloud') {
+              container('docker') {
                   // build
-                  sh "gcloud builds submit -t ${IMAGE_TAG} . "
+                  sh "docker build -t ${IMAGE_TAG} . "
           }
             }
     }
