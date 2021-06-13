@@ -1,4 +1,12 @@
 pipeline {
+    environment {
+    PROJECT = "gcp-terraform-315220"
+    APP_NAME = "hello-world"
+    CLUSTER = "${PROJECT}-gke"
+    CLUSTER_ZONE = "us-west1-a"
+    IMAGE_TAG = "gcr.io/${PROJECT}/${APP_NAME}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
+    JENKINS_CRED = "${PROJECT}"
+  }
     agent {
       kubernetes {
         label 'hello world'
@@ -10,7 +18,6 @@ pipeline {
     component: ci
   spec:
     # Use service account that can deploy to all namespaces
-    serviceAccountName: gcp-terraform-315220-sa
     containers:
     - name: maven
       image: maven:3.3.9-jdk-8-alpine
@@ -31,7 +38,7 @@ pipeline {
 	}
 
   stages {
-      stage("Build") {
+      stage("Maven Build") {
         steps {
           container('maven') {
               // build
@@ -39,6 +46,15 @@ pipeline {
       }
         }
 }
+    stage("Docker Build") {
+            steps {
+              container('gcloud') {
+                  // build
+                  sh "gcloud builds submit -t ${IMAGE_TAG} . "
+          }
+            }
+    }
+
 
 }
 }
