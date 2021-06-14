@@ -60,23 +60,23 @@ pipeline {
       }
         }
 }
-//     stage("Docker Build") {
-//             steps {
-//               container('gcloud') {
-//                   // build
-//                   sh "gcloud builds submit -t ${IMAGE_TAG} . "
-//           }
-//             }
-//     }
-	  stage("Docker Build") {
+    stage("Docker Build") {
             steps {
-              container('docker') {
-                 
+              container('gcloud') {
                   // build
-                  sh "docker build -t ${IMAGE_TAG} . "
+                  sh "gcloud builds submit -t ${IMAGE_TAG} . "
           }
             }
     }
+// 	  stage("Docker Build") {
+//             steps {
+//               container('docker') {
+                 
+//                   // build
+//                   sh "docker build -t ${IMAGE_TAG} . "
+//           }
+//             }
+//     }
 
 
 }
