@@ -4,7 +4,7 @@ pipeline {
     APP_NAME = "hello-world"
     CLUSTER = "${PROJECT}-gke"
     CLUSTER_ZONE = "us-west1-a"
-    IMAGE_TAG = "${PROJECT}/${APP_NAME}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
+    IMAGE_TAG = "gcr.io/${PROJECT}/${APP_NAME}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
     JENKINS_CRED = "${PROJECT}"
   }
     agent {
