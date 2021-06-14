@@ -46,7 +46,7 @@ pipeline {
       - hostPath:
          path:"/var/run/docker.sock"
         name: "workspace-volume"
-       
+
   """
   }
 	}
@@ -68,15 +68,15 @@ pipeline {
           }
             }
     }
-// 	  stage("Docker Build") {
-//             steps {
-//               container('docker') {
-                 
-//                   // build
-//                   sh "docker build -t ${IMAGE_TAG} . "
-//           }
-//             }
-//     }
+    stage("Deploy on GKE") {
+            steps {
+              container('kubectl') {
+              sh "sed -i s#gcr.io/gcp-terraform-315220/hello-world#${IMAGE_TAG}#g ./k8s/deployment.yaml"
+          step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT, clusterName: env.CLUSTER, location: env.CLUSTER_ZONE, manifestPattern: './k8s/deployment.yaml', credentialsId: env.JENKINS_CRED, verifyDeployments: true])
+          }
+            }
+    }
+
 
 
 }
